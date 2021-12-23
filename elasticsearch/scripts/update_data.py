@@ -42,9 +42,9 @@ for path, filename in get_filenames():
                 index_prefix = '{"index": {}}'
                 new_file.write(f'{index_prefix}\n{line}')
 
-    # Iterating over each "prepped" file to replace the original file
-    for prepped in prepped_files:
-        original_file_name = prepped.replace('_updated', '')
-        print(f'Before: {prepped}\nAfter: {original_file_name}\n')
-        if os.path.exists(prepped):
-            os.replace(prepped, original_file_name)
+# Iterating over each "prepped" file to replace the original file
+for prepped in prepped_files:
+    original_file_name = prepped.replace('_updated', '')
+    print(f'Before: {prepped}\nAfter: {original_file_name}\n')
+    if os.path.exists(prepped):
+        os.replace(prepped, original_file_name)
