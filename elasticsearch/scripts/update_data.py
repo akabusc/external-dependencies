@@ -15,14 +15,13 @@ def get_filepath(directory_path: str, file_name: str):
     return f'{directory_path}/{file_name}'
 
 
-original_files = []
-prepped_files = []
-
-
 def get_prepped_file_name(file_name: str):
     filename_without_extension = os.path.splitext(file_name)[0]
     return f'{filename_without_extension}_updated.json'
 
+
+original_files = []
+prepped_files = []
 
 # Getting all of the data files (tuple: path & filename)
 for path, filename in get_filenames():
