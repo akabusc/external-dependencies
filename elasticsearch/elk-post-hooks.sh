@@ -18,8 +18,8 @@ printf "\nIndex Mappings update completed\n"
 
 # Data
 printf "\nData upload update started\n"
-gunzip -c /usr/local/bin/elasticsearch-init/data/reddit_submissions.json.gz | curl -v -X PUT "http://localhost:9200/reddit_submissions_index/_bulk?pretty" -H 'Content-Type: application/x-ndjson' --data-binary @-
-gunzip -c /usr/local/bin/elasticsearch-init/data/reddit_comments.json.gz | curl -v -X PUT "http://localhost:9200/reddit_comments_index/_bulk?pretty" -H 'Content-Type: application/x-ndjson' --data-binary @-
+gunzip -c /usr/local/bin/elasticsearch-init/data/submissions_sample.json.gz | curl -v -X PUT "http://localhost:9200/reddit_submissions_index/_bulk?pretty" -H 'Content-Type: application/x-ndjson' --data-binary @-
+gunzip -c /usr/local/bin/elasticsearch-init/data/comments_sample.json.gz | curl -v -X PUT "http://localhost:9200/reddit_comments_index/_bulk?pretty" -H 'Content-Type: application/x-ndjson' --data-binary @-
 printf "\nData upload update completed\n"
 
 printf "\nPre-Hook script completed\n"

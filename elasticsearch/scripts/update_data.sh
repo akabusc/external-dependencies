@@ -19,5 +19,12 @@ function toggle_compression() {
   popd >/dev/null
 }
 
-# TODO Update the following to call the python script to also update the data within needed index info and re-toggle
+function update_data() {
+  python3 "$SCRIPTS_DIR/update_data.py" $DATA_DIR '.out'
+}
+
+# Updating the sample data with the index (and other) information to support ingestion into Elasticsearch
+update_data
+
+# Converting the JSON file to a GZIP file
 toggle_compression
