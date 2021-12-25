@@ -18,7 +18,7 @@ class DataIngestion:
     def __get_filepath(directory_path: str, file_name: str):
         return f'{directory_path}/{file_name}'
 
-    def process_update(self, update_line_func, get_new_file_name_func):
+    def process_update(self, update_line_func, get_new_file_name_func, file_prefix_line_func=None):
         new_file_locations = []
 
         # Getting all of the data files (tuple: path & filename)
@@ -35,6 +35,8 @@ class DataIngestion:
             with open(filepath, 'r') as file:
                 # Writing each line (from the original) to the new file with adjustments/updates
                 with open(new_filepath, 'w') as new_file:
+                    if file_prefix_line_func is not None:
+                        new_file.write(file_prefix_line_func())
                     for line in file:
                         new_file.write(update_line_func(line))
 

@@ -9,7 +9,7 @@ ELASTICSEARCH_DATA_DIR="$ELASTICSEARCH_DIR/data"
 POSTGRES_DIR="$SCRIPTS_DIR/postgres"
 POSTGRES_DATA_DIR="$POSTGRES_DIR/data"
 
-function remove_outdated_files() {
+function remove_files() {
   echo "Removing outdated data from: $1"
   rm -vrf $1
   echo
@@ -25,7 +25,7 @@ function update_elasticsearch_data() {
   pushd $ELASTICSEARCH_DIR >/dev/null
   # Removing any outdated files
   # Note: ensuring that when we start with a clean slate when updating data
-  remove_outdated_files $ELASTICSEARCH_DATA_DIR
+  remove_files $ELASTICSEARCH_DATA_DIR
 
   # Copying any new files from the parent data directory
   # Note: the data is shared and processed different between sources
@@ -40,14 +40,17 @@ function update_postgres_data() {
   pushd $POSTGRES_DIR >/dev/null
   # Removing any outdated files
   # Note: ensuring that when we start with a clean slate when updating data
-  remove_outdated_files $POSTGRES_DATA_DIR
+  remove_files $POSTGRES_DATA_DIR
 
   # Copying any new files from the parent data directory
-  # TODO: Implement the ingestion logic before uncommenting this line
-  # copying_push_shift_data $POSTGRES_DATA_DIR
+   copying_push_shift_data $POSTGRES_DATA_DIR
 
   # Creating the new sample data in the format needed for ingestion
   ./build.sh
+
+  # Removing the JSON files originally used for ingestion creation
+  remove_files "$POSTGRES_DATA_DIR/*.json"
+
   popd >/dev/null
 }
 
