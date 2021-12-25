@@ -4,6 +4,7 @@ set -e
 SCRIPTS_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)
 DATA_DIR="$(dirname $SCRIPTS_DIR)/data"
 PUSH_SHIFT_DATA_DIR="$(dirname $SCRIPTS_DIR)/../data"
+PYTHON_SCRIPTS_DIR="$(dirname $SCRIPTS_DIR)/../scripts"
 
 function toggle_compression() {
   pushd $DATA_DIR >/dev/null
@@ -22,7 +23,7 @@ function toggle_compression() {
 
 function update_data() {
   echo "Updating the data for Elasticsearch ingestion"
-  python3 "$SCRIPTS_DIR/update_data.py"
+  python3 "$PYTHON_SCRIPTS_DIR/elasticsearch.py"
 }
 
 function remove_outdated_files() {
