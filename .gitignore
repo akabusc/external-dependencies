@@ -1,0 +1,5 @@
+# Ignoring specific Elasticsearch data to reduce the  file size of the repo
+/elasticsearch/data/**/*
+
+# Ignoring specific Postgres data to reduce the  file size of the repo
+/postgres/data/**/*
