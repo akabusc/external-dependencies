@@ -27,7 +27,7 @@ CREATE SCHEMA data AUTHORIZATION training_admin;
 -- search is intended to be created by the application service
 CREATE SCHEMA search AUTHORIZATION training_admin;
 
--- set current and database default search path to include the 'search' schema
+-- set current and database default search path to include both search and data schema
 SET
     search_path = search,data,public;
 ALTER
@@ -43,7 +43,6 @@ ALTER
     DEFAULT PRIVILEGES FOR ROLE training_admin IN SCHEMA search GRANT
     SELECT
     ON TABLES TO training_read_only;
-
 
 ALTER
     DEFAULT PRIVILEGES FOR ROLE training_admin IN SCHEMA search GRANT INSERT,
