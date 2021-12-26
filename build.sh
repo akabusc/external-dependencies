@@ -9,6 +9,10 @@ ELASTICSEARCH_DATA_DIR="$ELASTICSEARCH_DIR/data"
 POSTGRES_DIR="$SCRIPTS_DIR/postgres"
 POSTGRES_DATA_DIR="$POSTGRES_DIR/data"
 
+# Script variables
+buildOptions=() # Used for passing arguments to the Docker build CLI command
+teardown=false # Used for forcing Docker down and re-generating Sample data
+
 function remove_files() {
   echo "Removing outdated data from: $1"
   rm -vrf $1
@@ -43,7 +47,7 @@ function update_postgres_data() {
   remove_files $POSTGRES_DATA_DIR
 
   # Copying any new files from the parent data directory
-   copying_push_shift_data $POSTGRES_DATA_DIR
+  copying_push_shift_data $POSTGRES_DATA_DIR
 
   # Creating the new sample data in the format needed for ingestion
   ./build.sh
@@ -54,8 +58,27 @@ function update_postgres_data() {
   popd >/dev/null
 }
 
-# Updating the elasticsearch data
-update_elasticsearch_data
+while getopts "cdt" opt; do
+  case $opt in
+  c) # Rebuild without cache
+    buildOptions+=("--no-cache")
+    ;;
+  d) # Rebuild with new data
+    teardown=true
+    ;;
+  esac
+done
 
-# Updating the postgres data
-update_postgres_data
+if [ "$teardown" = true ]; then
+
+  docker-compose down
+
+  # Updating the elasticsearch data
+  update_elasticsearch_data
+
+  # Updating the postgres data
+  update_postgres_data
+
+fi
+
+docker-compose build --parallel "${buildOptions[@]}"
