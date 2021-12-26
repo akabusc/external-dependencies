@@ -33,11 +33,6 @@ def get_string_value(data, field_name, default_value="null"):
     return f"'{sub}'"
 
 
-# Function is used to ensure the sql connection line for the insert file
-def file_prefix_line():
-    return f'\connect training\n'
-
-
 if __name__ == "__main__":
     data_ingestion = DataIngestion(
         target_file_extension=Extension.SQL,
@@ -47,5 +42,5 @@ if __name__ == "__main__":
     # Processing the data updates needed for ingestion
     data_ingestion.process_update(
         update_line_func=update_line,
-        file_prefix_func=file_prefix_line
+        file_prefix_func=lambda: '\connect training\n'
     )
