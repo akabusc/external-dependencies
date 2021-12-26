@@ -1,6 +1,5 @@
 import os
 import json
-import re
 from service.data_ingestion import DataIngestion
 from service.extension import Extension
 
@@ -9,14 +8,29 @@ from service.extension import Extension
 def update_line(ingestion_line_number, line):
     data = json.loads(line)
     author = data['author']
-    body = get_body(data, 'body') if 'body' in data else get_body(data, 'selftext')
+
+    body = get_string_value(data, 'body')
+    self_text = get_string_value(data, 'selftext')
+
     insert_id = ingestion_line_number + 1
-    return f"insert into data.reddit (id, author, body) values ({insert_id}, '{author}', '{body}');\n"
+    return (
+        "insert into data.reddit (id, author, body, selftext)\n"
+        f"values ({insert_id}, '{author}', {body}, {self_text});\n"
+    )
 
 
 # Function is used to remove undesirable characters from the body
-def get_body(data, field_name):
-    return re.sub('[^a-zA-Z0-9 ?!.,]*', '', data[field_name])
+def get_string_value(data, field_name, default_value="null"):
+    if field_name not in data:
+        return default_value
+
+    # Escaping the single-quote character within SQL
+    sub = data[field_name].replace("'", "''")
+    if not sub:
+        return default_value
+
+    # Wrapping the value in single-quotes for SQL to insert as string
+    return f"'{sub}'"
 
 
 # Function is used to ensure the sql connection line for the insert file
