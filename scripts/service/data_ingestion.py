@@ -28,8 +28,6 @@ class DataIngestion:
                        file_prefix_func: Callable[[], str] = None):
         new_file_locations: list = []
 
-        print(self.target_directory)
-
         ingestion_line_number: int = 0
         # Getting all of the data files (tuple: path & filename)
         for path, filename in self.__get_filenames():
