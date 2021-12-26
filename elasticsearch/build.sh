@@ -17,6 +17,7 @@ function toggle_compression() {
       gunzip "$FILENAME.json.gz"
     fi
   done
+  echo
   popd >/dev/null
 }
 
