@@ -3,3 +3,5 @@
 
 # Ignoring specific Postgres data to reduce the  file size of the repo
 /postgres/data/**/*
+
+*.iml
