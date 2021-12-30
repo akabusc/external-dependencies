@@ -69,27 +69,28 @@ class PostgresConverter(Converter):
 
 
 class PostgresData:
-    __slots__ = ['author', 'body', 'self_text', 'insert_id']
+    __slots__ = ['_data', '_insert_id']
 
     def __init__(self, data: dict, insert_id: int):
-        self.author = data['author']
-        self.body = self.get_string_value(data, 'body')
-        self.self_text = self.get_string_value(data, 'selftext')
-        self.insert_id = insert_id
+        self._data = data
+        self._insert_id = insert_id
 
     def __format__(self, _):
+        body = self.get_string_value('body')
+        self_text = self.get_string_value('self_text')
+        author = self.get_string_value('author')
         return (
             "insert into data.reddit (id, author, body, selftext)\n"
-            f"values ({self.insert_id}, '{self.author}', {self.body}, {self.self_text});\n"
+            f"values ({self._insert_id}, {author}, {body}, {self_text});\n"
         )
 
     # Function is used to remove undesirable characters from the body
-    def get_string_value(self, data: dict, field_name: str, default_value: str = "null"):
-        if field_name not in data:
+    def get_string_value(self, field_name: str, default_value: str = "null"):
+        if field_name not in self._data:
             return default_value
 
         # Escaping the single-quote character within SQL
-        sub: str = data[field_name].replace("'", "''")
+        sub: str = self._data[field_name].replace("'", "''")
         if not sub:
             return default_value
 
