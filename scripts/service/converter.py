@@ -69,6 +69,7 @@ class PostgresConverter(Converter):
 
 
 class PostgresData:
+    __slots__ = ['author', 'body', 'self_text', 'insert_id']
 
     def __init__(self, data: dict, insert_id: int):
         self.author = data['author']
